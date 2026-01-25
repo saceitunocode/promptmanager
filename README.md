@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Prompt Manager 🚀
 
-## Getting Started
+Una aplicación web moderna para gestionar, organizar y almacenar tus prompts de IA de manera eficiente. Construida con **Next.js** y diseñada para funcionar localmente con capacidades de persistencia avanzada.
 
-First, run the development server:
+Esta aplicación es la evolución de la "Biblioteca de Prompts - Founderz", migrada a una arquitectura robusta basada en React y Componentes.
+
+## ✨ Características Principales
+
+- **Organización por Carpetas**: Crea, edita y elimina carpetas para organizar tus prompts temáticamente. Personaliza sus colores.
+- **Gestión de Prompts**: CRUD completo de prompts. Títulos, contenido y metadatos.
+- **Drag & Drop Intuitivo**:
+  - Reordena prompts dentro de una lista.
+  - Mueve prompts entre carpetas arrastrándolos.
+  - Interfaz fluida y reactiva.
+- **Persistencia Local**:
+  - Guardado automático en `localStorage`.
+  - **Sincronización con Archivos**: Capacidad de abrir y guardar directamente en archivos JSON de tu sistema local usando la *File System Access API*.
+- **Vistas Flexibles**: Alterna entre vista de Cuadrícula (Grid) y Lista.
+- **Búsqueda en Tiempo Real**: Filtra prompts instantáneamente por título o contenido.
+- **Privacidad Total**: Todo se ejecuta en tu navegador. Tus prompts no salen de tu dispositivo a menos que tú los exportes.
+- **Modo Oscuro**: Interfaz diseñada nativamente en modo oscuro para reducir la fatiga visual.
+
+## 🛠️ Stack Tecnológico
+
+| Tecnología | Versión / Notas |
+| :--- | :--- |
+| [Next.js](https://nextjs.org/) | v16.1.4 (App Router) |
+| [React](https://react.dev/) | v19.2.3 |
+| [TypeScript](https://www.typescriptlang.org/) | v5+ |
+| [Tailwind CSS](https://tailwindcss.com/) | v4 |
+| [Lucide React](https://lucide.dev/) | Iconografía |
+| [File System API](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API) | Persistencia en disco |
+
+## 🚀 Cómo Empezar
+
+### Pre-requisitos
+
+- [Node.js](https://nodejs.org/) (v18 o superior)
+- [pnpm](https://pnpm.io/) (recomendado)
+
+### Instalación
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Clonar el repositorio
+git clone <url-del-repositorio>
+cd promptmanager
+
+# Instalar dependencias
+pnpm install
+
+# Iniciar servidor de desarrollo
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Estructura del Proyecto
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```text
+/src
+├── app/                    # Páginas y Layouts (Next.js App Router)
+├── components/             # Componentes Reutilizables (UI)
+│   ├── PromptCard.tsx      # Tarjeta individual de prompt
+│   ├── Sidebar.tsx         # Barra lateral de navegación
+│   └── ...
+├── store/                  # Estado Global (Context API)
+│   └── AppContext.tsx      # Lógica de negocio centralizada
+└── types/                  # Definiciones de Tipos TypeScript
+```
 
-## Learn More
+## 🤖 Para Desarrolladores (IA)
 
-To learn more about Next.js, take a look at the following resources:
+Este proyecto incluye un archivo `AGENTS.md` con instrucciones detalladas, arquitectura y convenciones de código para mantener la calidad y coherencia del proyecto durante el desarrollo asistido por IA.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📄 Licencia
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Privada / Uso Personal.
