@@ -1,65 +1,227 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useCallback } from 'react';
+import { Inbox, FolderOpen } from 'lucide-react';
+import { AppProvider, useApp } from '@/store/AppContext';
+import { Sidebar, Header, PromptCard, EditModal, ConfirmModal, Toast } from '@/components';
+import { Prompt } from '@/types';
+
+function PromptManager() {
+  const { state, addPrompt, deletePrompt, updatePrompt, getPromptsForFolder, getFolderById, getPromptById, reorderPrompts } = useApp();
+  
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [editingPromptId, setEditingPromptId] = useState<string | null>(null);
+  const [isNewPrompt, setIsNewPrompt] = useState(false);
+  const [confirmModal, setConfirmModal] = useState<{ title: string; message: string; onConfirm: () => void } | null>(null);
+  const [toast, setToast] = useState<{ message: string; isError: boolean } | null>(null);
+  const [draggedPromptId, setDraggedPromptId] = useState<string | null>(null);
+
+  const showToast = useCallback((message: string, isError = false) => {
+    setToast({ message, isError });
+  }, []);
+
+  const handleAddPrompt = () => {
+    if (!state.selectedFolderId) {
+      showToast('Selecciona una carpeta.', true);
+      return;
+    }
+    const newId = addPrompt();
+    if (newId) {
+      setEditingPromptId(newId);
+      setIsNewPrompt(true);
+    }
+  };
+
+  const handleCopyPrompt = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('¡Copiado al portapapeles!');
+    });
+  };
+
+  const handleDeletePrompt = (prompt: Prompt) => {
+    setConfirmModal({
+      title: 'Eliminar Prompt',
+      message: `¿Seguro que quieres eliminar "${prompt.title || 'Sin título'}"?`,
+      onConfirm: () => {
+        deletePrompt(prompt.id);
+        setConfirmModal(null);
+      },
+    });
+  };
+
+  const handleEditPrompt = (promptId: string) => {
+    setEditingPromptId(promptId);
+    setIsNewPrompt(false);
+  };
+
+  const handleSavePrompt = (updates: Partial<Prompt>) => {
+    if (editingPromptId) {
+      updatePrompt(editingPromptId, updates);
+      setEditingPromptId(null);
+      setIsNewPrompt(false);
+      showToast('Prompt guardado');
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingPromptId(null);
+    setIsNewPrompt(false);
+  };
+
+  const handleDeleteNewPrompt = () => {
+    if (editingPromptId) {
+      deletePrompt(editingPromptId);
+    }
+  };
+
+  const handleViewFile = (fileData: string) => {
+    const newTab = window.open();
+    if (newTab) {
+      newTab.document.title = 'Vista Previa';
+      newTab.document.body.style.margin = '0';
+      newTab.document.body.style.overflow = 'hidden';
+      newTab.document.body.innerHTML = `<iframe src="${fileData}" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100vw; height:100vh;" allowfullscreen></iframe>`;
+    } else {
+      showToast('Por favor, permite las ventanas emergentes.', true);
+    }
+  };
+
+  // Drag and drop for prompts
+  const handlePromptDragStart = (e: React.DragEvent, promptId: string) => {
+    setDraggedPromptId(promptId);
+    e.dataTransfer.setData('promptId', promptId);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handlePromptDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handlePromptDrop = (e: React.DragEvent, targetPromptId: string) => {
+    e.preventDefault();
+    if (!draggedPromptId || draggedPromptId === targetPromptId) {
+      setDraggedPromptId(null);
+      return;
+    }
+
+    const prompts = getPromptsForFolder(state.selectedFolderId!);
+    const newOrder = prompts.map(p => p.id);
+    const draggedIndex = newOrder.indexOf(draggedPromptId);
+    const targetIndex = newOrder.indexOf(targetPromptId);
+    
+    newOrder.splice(draggedIndex, 1);
+    newOrder.splice(targetIndex, 0, draggedPromptId);
+    
+    reorderPrompts(newOrder);
+    setDraggedPromptId(null);
+  };
+
+  const selectedFolder = state.selectedFolderId ? getFolderById(state.selectedFolderId) : null;
+  const prompts = state.selectedFolderId ? getPromptsForFolder(state.selectedFolderId) : [];
+  const filteredPrompts = prompts.filter(p => 
+    !searchQuery || 
+    p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    p.text.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const editingPrompt = editingPromptId ? getPromptById(editingPromptId) : null;
+
+  return (
+    <div className="flex h-screen">
+      <div className={sidebarCollapsed ? 'sidebar-collapsed' : ''}>
+        <Sidebar />
+      </div>
+      
+      <main className="flex-1 flex flex-col bg-[#1a1a1a]">
+        <Header 
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
+          onAddPrompt={handleAddPrompt}
+        />
+        
+        <div className="flex-1 p-6 overflow-y-auto">
+          {state.selectedFolderId ? (
+            <>
+              <h2 className="text-2xl font-bold mb-6 text-white">
+                {selectedFolder?.name || ''}
+              </h2>
+              
+              {filteredPrompts.length > 0 ? (
+                <div className={
+                  state.viewMode === 'list' 
+                    ? 'prompts-list-view' 
+                    : 'prompts-grid-view grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
+                }>
+                  {filteredPrompts.map(prompt => (
+                    <PromptCard
+                      key={prompt.id}
+                      prompt={prompt}
+                      viewMode={state.viewMode}
+                      onCopy={() => handleCopyPrompt(prompt.text)}
+                      onDelete={() => handleDeletePrompt(prompt)}
+                      onEdit={() => handleEditPrompt(prompt.id)}
+                      onViewFile={() => prompt.fileData && handleViewFile(prompt.fileData)}
+                      onDragStart={(e) => handlePromptDragStart(e, prompt.id)}
+                      onDragOver={handlePromptDragOver}
+                      onDrop={(e) => handlePromptDrop(e, prompt.id)}
+                    />
+                  ))}
+                </div>
+              ) : !searchQuery ? (
+                <div className="text-center text-gray-500 mt-16">
+                  <Inbox className="w-16 h-16 mx-auto mb-4" />
+                  <p className="text-lg">Esta carpeta está vacía.</p>
+                  <p>Crea un nuevo prompt para empezar.</p>
+                </div>
+              ) : null}
+            </>
+          ) : (
+            <div className="text-center text-gray-500 mt-16">
+              <FolderOpen className="w-16 h-16 mx-auto mb-4" />
+              <p className="text-lg">Selecciona o crea una carpeta</p>
+              <p>Tus prompts se organizan en carpetas.</p>
+            </div>
+          )}
+        </div>
+      </main>
+
+      {editingPrompt && (
+        <EditModal
+          key={editingPrompt.id}
+          prompt={editingPrompt}
+          isNew={isNewPrompt}
+          onSave={handleSavePrompt}
+          onCancel={handleCancelEdit}
+          onDelete={handleDeleteNewPrompt}
+        />
+      )}
+
+      {confirmModal && (
+        <ConfirmModal
+          title={confirmModal.title}
+          message={confirmModal.message}
+          onConfirm={confirmModal.onConfirm}
+          onCancel={() => setConfirmModal(null)}
+        />
+      )}
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          isError={toast.isError}
+          onClose={() => setToast(null)}
+        />
+      )}
+    </div>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <AppProvider>
+      <PromptManager />
+    </AppProvider>
   );
 }
