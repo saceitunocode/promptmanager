@@ -1,115 +1,28 @@
-# AGENTS.md - Instrucciones para Agentes de IA
+# AGENTS.md - Normas para Agentes
 
-Este archivo define las reglas, convenciones y contexto técnico para trabajar en el proyecto `promptmanager`. Los agentes de IA **DEBEN** leer y seguir estas instrucciones.
+Este archivo define las reglas de comportamiento y normas de actuación del sistema. La implementación técnica reside exclusivamente en `.agent/`.
 
----
+## 🎯 Objetivo General
+Mantener la integridad, rendimiento y calidad de la biblioteca de prompts, asegurando una experiencia local privada y fluida.
 
-## 📌 Contexto del Proyecto
+## 📜 Reglas de Comportamiento (Mandatorias)
 
-| Atributo | Valor |
-| :--- | :--- |
-| **Nombre** | Prompt Manager (Biblioteca de Prompts) |
-| **Descripción** | Gestor local de prompts con organización por carpetas y persistencia local |
-| **Arquitectura** | Next.js App Router (v16+) |
-| **Estado** | React Context + LocalStorage + File System Access API |
-| **Repositorio** | TypeScript + Tailwind CSS |
+1.  **Fuente de Verdad**: Siempre consulta `.agent/` antes de cualquier implementación técnica. Consulta `promptmanager-core` para detalles específicos del proyecto.
+2.  **Referenciación**: No dupliques código o definiciones de `.agent/`. Resume solo el impacto y las normas de uso si es necesario explicarlas.
+3.  **Idioma**: Comunicación con el usuario en **Español**. Comentarios de código y variables en **Inglés**.
+4.  **Prioridad de Código**:
+    - **Seguridad**: No comprometer la privacidad local de los prompts.
+    - **Simplicidad**: Sigue los principios de `clean-code` (evita sobre-ingeniería).
+    - **Consistencia**: Mantener el patrón de estado basado en `AppContext`.
+5.  **Checks Finales**: Ninguna tarea se considera terminada sin verificar tipos de TS y linting (`pnpm build`).
 
----
-
-## 🛠️ Stack Tecnológico
-
-| Componente | Tecnología | Versión / Notas |
-| :--- | :--- | :--- |
-| **Framework** | Next.js | v16.1.4 (App Router) |
-| **Lenguaje** | TypeScript | v5+ (Strict Mode) |
-| **UI Library** | React | v19.2.3 |
-| **Estilos** | Tailwind CSS | v4 (PostCSS plugin) |
-| **Iconos** | Lucide React | |
-| **Persistencia** | LocalStorage + File System API | Sincronización con archivos JSON locales |
-| **Linting** | ESLint | `eslint-config-next` |
-| **Manager** | pnpm | |
-
----
-
-## 📂 Estructura de Proyecto
-
-```text
-/
-├── src/
-│   ├── app/                    # Rutas App Router
-│   │   ├── layout.tsx          # Layout raíz (Providers)
-│   │   ├── page.tsx            # Página principal (Dashboard)
-│   │   └── globals.css         # Estilos globales (Tailwind v4)
-│   ├── components/             # Componentes de UI
-│   │   ├── Sidebar.tsx         # Navegación y gestión de carpetas
-│   │   ├── PromptCard.tsx      # Tarjeta visual de prompt
-│   │   ├── EditModal.tsx       # Modal de edición/creación
-│   │   ├── ConfirmModal.tsx    # Modal de confirmación genérico
-│   │   └── ...                 # Otros componentes
-│   ├── store/                  # Gestión de Estado
-│   │   └── AppContext.tsx      # Contexto global (Folders, Prompts, UI State)
-│   ├── types/                  # Definiciones de TypeScript
-│   │   └── index.ts            # Interfaces (Folder, Prompt, AppData)
-│   └── utils/                  # Pasarelas y utilidades
-└── AGENTS.md                   # ESTE ARCHIVO
-```
-
----
-
-## 🏛️ Patrones y Arquitectura
-
-### Gestión de Estado (Context Pattern)
-- **Centralizado**: Todo el estado global (carpetas, prompts, selección, drag & drop) reside en `AppContext.tsx`.
-- **Acceso**: Usar el hook `useApp()` para acceder al estado y acciones.
-- **Persistencia**: El contexto maneja automáticamente el guardado en `localStorage` y la sincronización con archivos locales si hay un `fileHandle` activo.
-
-### Componentes (Presentational vs Container)
-- **Componentes Tontos (Presentational)**: Reciben datos y callbacks por props (ej: `PromptCard`, `ConfirmModal`). No deben acceder a `useApp` si pueden evitarlo.
-- **Componentes Listos (Container)**: `page.tsx` o `Sidebar.tsx` conectan con `useApp` y distribuyen la lógica.
-
-### SOLID en React
-- **S (Single Responsibility)**: `AppContext` maneja los datos, los componentes manejan la visualización.
-- **O (Open/Closed)**: Los componentes como `PromptCard` usan props para sus acciones en lugar de hardcodear lógica de negocio.
-- **D (Dependency Inversion)**: Las dependencias de datos se inyectan via Contexto o Props.
-
----
-
-## 📐 Reglas de Desarrollo
-
-### 1. TypeScript
-- **Strict Mode**: No usar `any`. Definir interfaces claras en `src/types/index.ts`.
-- **Props**: Definir interfaces para los props de todos los componentes.
-- **Eventos**: Tipar correctamente los eventos (`React.DragEvent`, `React.ChangeEvent`).
-
-### 2. Next.js & React
-- **'use client'**: Dado que es una SPA local altamente interactiva, la mayoría de componentes serán Client Components.
-- **Hooks**: Usar `useCallback` para funciones pasadas a componentes hijos para evitar re-renders innecesarios, especialmente en listas largas de prompts.
-
-### 3. Estilos (Tailwind CSS v4)
-- **Tema Oscuro**: La aplicación usa un diseño oscuro por defecto (`bg-[#1a1a1a]`, `text-white`).
-- **Responsive**: Grid system para las tarjetas (`grid-cols-1` a `grid-cols-4`).
-- **Drag & Drop**: Clases visuales para el estado de arrastre (ej: opacidad reducida, bordes resaltados).
-
-### 4. Funcionalidades Críticas
-- **Persistencia**: NUNCA romper la lógica de `localStorage` en `AppContext`.
-- **File System API**: Mantener la compatibilidad con el sistema de archivos nativo para guardar/cargar JSONs.
-
----
-
-## 🧪 Testing (Planificado)
-- Aunque actualment no hay tests configurados, escribir código testeable (funciones puras donde sea posible, separación de lógica y vista).
-
----
-
-## ✅ Checklist de Calidad
-
-- [ ] ¿El cambio mantiene la persistencia de datos?
-- [ ] ¿Funciona el Drag & Drop tras los cambios?
-- [ ] ¿La interfaz responde correctamente a Mobile/Desktop?
-- [ ] ¿No hay errores de TypeScript? (`pnpm build`)
-
----
-
-## 🤖 Instrucciones Específicas
+## 🧠 Guía de Actuación
+- **Modo Plan**: Si el cambio es estructural, genera un plan antes de codificar.
+- **Modo Edición**: Realiza cambios incrementales y verifica la persistencia de datos tras cada modificación.
+- **Sincronización**: Siempre ten en cuenta la compatibilidad con la *File System Access API* al modificar el almacenamiento.
 - **Idioma**: Responder al usuario en Español. Código y comentarios en Inglés.
-- **Contexto**: Recordar que esto migró de un HTML monolítico; mantener la paridad de funcionalidades es prioridad.
+
+---
+
+## 🏗️ Contexto del Sistema (Impacto)
+El sistema utiliza una arquitectura basada en **Next.js App Router** con un estado global centralizado. Los agentes deben actuar con cautela al modificar el `AppContext` para no romper la lógica de sincronización local.
