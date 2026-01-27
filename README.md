@@ -68,10 +68,16 @@ Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 └── types/                  # Definiciones de Tipos TypeScript
 ```
 
-## 🤖 Para Desarrolladores (IA)
+## 🤖 Desarrollo Asistido por IA
 
-Este proyecto incluye un archivo `AGENTS.md` con instrucciones detalladas, arquitectura y convenciones de código para mantener la calidad y coherencia del proyecto durante el desarrollo asistido por IA.
+Este proyecto está diseñado para evolucionar con la ayuda de **agentes de IA especializados**. Estos agentes:
 
-## 📄 Licencia
+- **Mantienen la calidad del código** siguiendo patrones establecidos automáticamente
+- **Preservan la arquitectura** sin necesidad de documentación manual repetitiva
+- **Aceleran el desarrollo** aplicando reglas de seguridad, testing y rendimiento de forma consistente
 
-Privada / Uso Personal.
+**¿Qué significa esto para ti?**
+- Si usas la aplicación: **Nada**. Funciona igual, solo que evoluciona más rápido y con menos bugs.
+- Si contribuyes al código: Los agentes te ayudarán a mantener la consistencia. Consulta `AGENTS.md` para las normas de comportamiento.
+
+El directorio `.agent/` contiene el sistema de agentes. **Este directorio debe versionarse en Git** junto con el código fuente, ya que asegura que cualquier desarrollador o instancia de IA mantenga la consistencia, habilidades y reglas específicas del proyecto. No necesitas entender su contenido interno para usar la aplicación.
