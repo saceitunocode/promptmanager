@@ -8,8 +8,6 @@
 
 Una aplicación web moderna para gestionar, organizar y almacenar tus prompts de IA de manera eficiente. Construida con **Next.js** y diseñada para funcionar localmente con capacidades de persistencia avanzada.
 
-Esta aplicación es la evolución de la *"Biblioteca de Prompts - Founderz"*, migrada a una arquitectura robusta basada en React y Componentes.
-
 ---
 
 ## ✨ Características Principales
