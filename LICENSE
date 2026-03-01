@@ -1,0 +1,110 @@
+Copyright (c) 2025–2026 Sergio Aceituno. All Rights Reserved.
+
+================================================================================
+                        LICENCIA RESTRICTIVA PERSONALIZADA
+                     (Custom Restrictive License — No Public Use)
+================================================================================
+
+AVISO LEGAL IMPORTANTE: LEA ESTE DOCUMENTO DETENIDAMENTE ANTES DE ACCEDER,
+COPIAR, CLONAR O USAR ESTE REPOSITORIO EN CUALQUIER FORMA.
+
+--------------------------------------------------------------------------------
+1. TITULARIDAD
+--------------------------------------------------------------------------------
+
+El código fuente, la documentación, los activos, la estructura del proyecto y
+cualquier otro contenido contenido en este repositorio (en adelante,
+"el Software") son propiedad exclusiva de:
+
+    Sergio Aceituno
+
+Todos los derechos están reservados. Ninguna parte de este Software puede ser
+usada, reproducida, distribuida, modificada, sublicenciada ni explotada de
+ninguna forma sin la autorización expresa y por escrito del autor.
+
+--------------------------------------------------------------------------------
+2. RESTRICCIONES
+--------------------------------------------------------------------------------
+
+Queda EXPRESAMENTE PROHIBIDO, sin autorización escrita previa del titular:
+
+  a) USAR el Software, en todo o en parte, en proyectos propios o de terceros,
+     ya sea de forma pública o privada, personal o profesional.
+
+  b) COPIAR o REPRODUCIR el código fuente, la arquitectura, los patrones de
+     diseño, los flujos de trabajo o cualquier parte del Software.
+
+  c) MODIFICAR, adaptar, traducir o crear obras derivadas del Software.
+
+  d) DISTRIBUIR, publicar, sublicenciar o poner a disposición del público el
+     Software, en forma original o modificada.
+
+  e) HACER FORK del repositorio con intención de utilizar, modificar o
+     redistribuir el contenido, independientemente del uso final previsto.
+
+  f) EXPLOTAR COMERCIALMENTE el Software, incluidas, sin limitación, las
+     siguientes actividades:
+       - Vender, alquilar o licenciar el Software o cualquier derivado.
+       - Integrar el Software en productos o servicios de pago.
+       - Usar el Software para generar ingresos directos o indirectos.
+
+  g) ATRIBUIRSE la autoría del Software total o parcialmente.
+
+--------------------------------------------------------------------------------
+3. VISIBILIDAD PÚBLICA
+--------------------------------------------------------------------------------
+
+La visibilidad pública de este repositorio tiene exclusivamente fines de
+exhibición y portafolio personal del autor.
+
+La accesibilidad pública del repositorio NO implica la concesión de ningún
+tipo de licencia de uso, copia, modificación o distribución. Ver el código
+no otorga ningún derecho sobre él.
+
+--------------------------------------------------------------------------------
+4. PERMISOS CONCEDIDOS
+--------------------------------------------------------------------------------
+
+Sin perjuicio de lo anterior, se permite expresamente:
+
+  a) VISUALIZAR el código fuente en plataformas de alojamiento (GitHub, etc.)
+     con fines de lectura y referencia personal, sin reproducir ni reutilizar
+     el contenido en otros proyectos.
+
+  b) SOLICITAR AUTORIZACIÓN al autor para usos específicos. Toda solicitud debe
+     realizarse por escrito y queda a discreción exclusiva del autor su
+     aprobación o rechazo.
+
+--------------------------------------------------------------------------------
+5. AUSENCIA DE GARANTÍA
+--------------------------------------------------------------------------------
+
+EL SOFTWARE SE PROPORCIONA "TAL CUAL", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O
+IMPLÍCITA, INCLUYENDO, ENTRE OTRAS, LAS GARANTÍAS DE COMERCIABILIDAD, IDONEIDAD
+PARA UN FIN PARTICULAR Y NO INFRACCIÓN. EN NINGÚN CASO EL AUTOR SERÁ
+RESPONSABLE DE RECLAMACIONES, DAÑOS U OTRAS RESPONSABILIDADES DERIVADAS DEL
+SOFTWARE O SU USO.
+
+--------------------------------------------------------------------------------
+6. VIOLACIÓN Y CONSECUENCIAS
+--------------------------------------------------------------------------------
+
+Cualquier uso, copia, distribución o explotación no autorizada del Software
+constituirá una infracción de los derechos de propiedad intelectual del autor
+y podrá dar lugar a acciones legales civiles y/o penales conforme a la
+legislación española e internacional aplicable, incluyendo:
+
+  - Ley de Propiedad Intelectual (Real Decreto Legislativo 1/1996, España)
+  - Directiva 2001/29/CE del Parlamento Europeo y del Consejo
+  - Convenio de Berna para la Protección de las Obras Literarias y Artísticas
+
+--------------------------------------------------------------------------------
+7. CONTACTO
+--------------------------------------------------------------------------------
+
+Para solicitar autorización de uso o para cualquier consulta relacionada con
+esta licencia, contacta con el autor a través del repositorio oficial.
+
+================================================================================
+             © 2025–2026 Sergio Aceituno — Todos los derechos reservados
+================================================================================
